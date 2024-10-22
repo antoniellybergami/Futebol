@@ -31,7 +31,8 @@
                     <td>{{ $partida->status }}</td>
                     <td>{{ $partida->data ?? 'N/A' }}</td> 
                     <td>{{ $partida->hora ?? 'N/A' }}</td> 
-                    <td><a href="{{ $partida->jogo }}">Ver Jogo</a></td>
+                    <td><a href="{{ route('partidas.saveDetalhes', $partida->id) }}">Ver Detalhes do Jogo</a>
+                    </td>
                 </tr>
             @endforeach
         </tbody>
