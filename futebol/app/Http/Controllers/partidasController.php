@@ -59,7 +59,12 @@ class partidasController extends Controller
         }
     }
 
-
+    public function index()
+    {
+        $partidas = Partida::all();
+    
+        return view('todasAsPartidas', compact('partidas')); 
+    }
 
 }
 

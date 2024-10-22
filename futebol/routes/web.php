@@ -8,3 +8,4 @@ Route::get('/', function () {
 });
 
 Route::get('/partidas', [PartidasController::class, 'listarPartidas']);
+Route::get('/todasPartidas', [PartidasController::class, 'index']);
