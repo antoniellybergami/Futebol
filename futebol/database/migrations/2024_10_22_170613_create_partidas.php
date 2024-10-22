@@ -10,16 +10,20 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up()
+
     {
         Schema::create('partidas', function (Blueprint $table) {
             $table->id();
             $table->string('time_casa');
+            $table->string('escudo_casa');
             $table->string('time_fora');
-            $table->integer('placar_casa')->nullable();
-            $table->integer('placar_fora')->nullable();
-            $table->dateTime('data_hora');
-            $table->string('estadio');
-            $table->string('campeonato');
+            $table->string('escudo_fora');
+
+            $table->string('status');
+            $table->string('data')->nullable();
+            $table->string('hora')->nullable();
+            $table->string('jogo');
+           
             $table->timestamps();
         });
     }
