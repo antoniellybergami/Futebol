@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('data')->nullable();
             $table->string('hora')->nullable();
             $table->string('jogo');
+            $table->string('partida_id')->unique();
+          
            
             $table->timestamps();
         });

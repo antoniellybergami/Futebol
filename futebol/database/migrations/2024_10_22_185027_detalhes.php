@@ -13,9 +13,15 @@ return new class extends Migration
     {
         Schema::create('detalhes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('partida_id')->constrained('partidas')->onDelete('cascade');
+            $table->string('partida_id')->nullable();; 
+            $table->string('rodada')->nullable();; 
+            $table->string('status')->nullable(); 
+            $table->string('campeonato')->nullable();; 
+            $table->foreign('partida_id')->references('partida_id')->on('partidas')->onDelete('cascade'); 
             $table->string('placar')->nullable();
             $table->string('estadio')->nullable();
+
+            $table->json('gols')->nullable();
 
             $table->json('escalacao_mandante')->nullable();
             $table->json('escalacao_visitante')->nullable();

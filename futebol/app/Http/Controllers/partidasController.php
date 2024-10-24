@@ -34,8 +34,8 @@ class partidasController extends Controller
                     $data = $partida['data_realizacao']; 
                     $hora = $partida['hora_realizacao']; 
                     $jogo = $partida['_link'];
+                    $partidaId = last(explode('/', $jogo));  //o explode divide a string jogo através da "/"  e o last pega o último
 
-                    // Salva a partida no banco
                     Partida::create([
                         'time_casa' => $timeCasa,
                         'escudo_casa' => $escudoTimeCasa,
@@ -46,11 +46,11 @@ class partidasController extends Controller
                         'data' => $data,
                         'hora' => $hora,
                         'jogo' => $jogo,
+                        'partida_id' => $partidaId,
                     ]);
                 }
            }
             
-        
 
         } else {
             return response()->json(['status' => $response->status(), 
@@ -77,8 +77,20 @@ class partidasController extends Controller
         if ($response->successful()) {
             $jogo = $response->json();
 
+            $partidaId = $jogo['partida_id']; 
+
+            $partida = Partida::where('partida_id', $partidaId)->first();
+
+            if (!$partida) {
+                return response()->json(['message' => 'Partida não encontrada.'], 404);
+            }
+        
+            $status = $jogo['status'];
+            $rodada = $jogo['rodada'];
+            $campeonato = $jogo['campeonato']['nome'];
             $placar = $jogo['placar'];
-            $estadio = $jogo['estadio'];
+            $estadio = $jogo['estadio']['nome_popular'] ?? null; 
+            $gols = $jogo['gols'];
             $status = $jogo['status'];
             $data = $jogo['data_realizacao'] ?? null; 
             $hora = $jogo['hora_realizacao'] ?? null; 
@@ -95,19 +107,23 @@ class partidasController extends Controller
             $visitante_escalacao = $jogo['escalacoes']['visitante'] ?? [];
 
             Detalhe::create([
-                'partida_id' => $id,
+                'partida_id' => $partida->partida_id,
+                'status' => $status,
+                'rodada' => $rodada,
                 'placar' => $placar, 
-                'estadio' => json_encode($estadio), 
-                'escalacao_mandante' => json_encode($mandante_escalacao),
-                'escalacao_visitante' => json_encode($visitante_escalacao),
-                'cartao_amarelo_mandante' => json_encode($mandante_cartoes_amarelo),
-                'cartao_amarelo_visitante' => json_encode($visitante_cartoes_amarelo),
-                'cartao_vermelho_mandante' => json_encode($mandante_cartoes_vermelho),
-                'cartao_vermelho_visitante' => json_encode($visitante_cartoes_vermelho),
+                'gols' => json_encode($gols, true),
+                'campeonato' => $campeonato,
+                'estadio' => $estadio, 
+                'escalacao_mandante' => json_encode($mandante_escalacao, true),
+                'escalacao_visitante' => json_encode($visitante_escalacao, true),
+                'cartao_amarelo_mandante' => json_encode($mandante_cartoes_amarelo, true),
+                'cartao_amarelo_visitante' => json_encode($visitante_cartoes_amarelo, true),
+                'cartao_vermelho_mandante' => json_encode($mandante_cartoes_vermelho, true),
+                'cartao_vermelho_visitante' => json_encode($visitante_cartoes_vermelho, true),
 
             ]);
 
-            return redirect()->route('partidas.show', ['id' => $id]);
+            return redirect()->route('partidas.show', ['id' => $partidaId]);
 
         } else {
             return response()->json([
@@ -126,8 +142,9 @@ class partidasController extends Controller
             return redirect()->back()->with('error', 'Detalhes da partida não encontrados.');
         }
 
-        return view('partida', compact('detalhes'));
+        return view('detalhes', compact('detalhes'));
     }
+
 
 }
 

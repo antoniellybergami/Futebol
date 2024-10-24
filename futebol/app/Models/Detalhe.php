@@ -13,6 +13,11 @@ class Detalhe extends Model
         'partida_id',
         'placar',
         'estadio',
+        'rodada',
+        'status',
+        'campeonato',
+
+        'gols',
 
         'escalacao_mandante',
         'escalacao_visitante',

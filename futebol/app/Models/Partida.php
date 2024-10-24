@@ -18,7 +18,8 @@ class Partida extends Model
         'status',
         'data',
         'hora',
-        'jogo'
+        'jogo',
+        'partida_id'
     ];
 }
 
