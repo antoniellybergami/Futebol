@@ -34,23 +34,42 @@ class partidasController extends Controller
                     $data = $partida['data_realizacao']; 
                     $hora = $partida['hora_realizacao']; 
                     $jogo = $partida['_link'];
+
                     $partidaId = last(explode('/', $jogo));  //o explode divide a string jogo através da "/"  e o last pega o último
 
-                    Partida::create([
-                        'time_casa' => $timeCasa,
-                        'escudo_casa' => $escudoTimeCasa,
-                        'time_fora' => $timeFora,
-                        'escudo_fora' => $escudoTimeFora,
+                    $temPartida = Partida::where('partida_id', $partidaId)->first(); //verifica se já tem essa partida
+                    if ($temPartida) {
+                        $temPartida->update([ //se tem atualiza
+                            'time_casa' => $timeCasa,
+                            'escudo_casa' => $escudoTimeCasa,
+                            'time_fora' => $timeFora,
+                            'escudo_fora' => $escudoTimeFora,
 
-                        'status' => $status,
-                        'data' => $data,
-                        'hora' => $hora,
-                        'jogo' => $jogo,
-                        'partida_id' => $partidaId,
-                    ]);
+                            'status' => $status,
+                            'data' => $data,
+                            'hora' => $hora,
+                            'jogo' => $jogo,
+                            'partida_id' => $partidaId,
+                        ]);
+                    } else {
+                        Partida::create([ //se não tem, cria
+                            'time_casa' => $timeCasa,
+                            'escudo_casa' => $escudoTimeCasa,
+                            'time_fora' => $timeFora,
+                            'escudo_fora' => $escudoTimeFora,
+
+                            'status' => $status,
+                            'data' => $data,
+                            'hora' => $hora,
+                            'jogo' => $jogo,
+                            'partida_id' => $partidaId,
+                        ]);
+                    }        
                 }
            }
             
+           $partidas = Partida::all();
+           return view('todasAsPartidas', compact('partidas')); 
 
         } else {
             return response()->json(['status' => $response->status(), 
