@@ -12,7 +12,7 @@
     <h1 class="titulo">Detalhes da Partida</h1>
 
     <h2 class="placar">{{ $detalhes->placar ?? 'Informações não disponíveis' }}</h2>
-    <h3 class="subtitulo">Campeonato: {{ $detalhes->campeonato ?? 'Informações não disponíveis' }}</h3>
+    <h3 class="subtitulo"> {{ $detalhes->campeonato ?? 'Informações não disponíveis' }}</h3>
     <h3 class="subtitulo">Estádio: {{ $detalhes->estadio ?? 'Informações não disponíveis' }}</h3>
     <h3 class="subtitulo">Status: {{ $detalhes->status ?? 'Informações não disponíveis' }}</h3>
     <h3 class="subtitulo">Rodada: {{ $detalhes->rodada ?? 'Informações não disponíveis' }}</h3>
